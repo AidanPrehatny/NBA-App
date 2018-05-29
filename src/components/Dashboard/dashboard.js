@@ -2,9 +2,14 @@ import React, { Component } from 'react';
 import FormField from '../widgets/FormFields/formFields';
 import styles from './dashboard.css';
 
+import { Editor } from 'react-draft-wysiwyg';
+import { EditorState, convertFromRaw, convertToRaw } from 'draft-js';
+import { stateToHTML } from 'draft-js-export-html';
+
 class Dashboard extends Component {
 
   state ={
+    editorState: EditorState.createEmpty(),
     postError: '',
     loading: false,
     formData: {
@@ -91,19 +96,19 @@ class Dashboard extends Component {
     if(formIsValid){
       console.log('Submit Post')
     }else{
-       this.setState({
-         postError: 'Something Went Wrong'
-       })
+      this.setState({
+        postError: 'Something Went Wrong'
+      })
     }
   }
 
   submitButton = () => (
     this.state.loading ?
-     'Loading...'
-     :
-     <div>
-       <button stype="submit" >Add Post</button>
-     </div>
+    'Loading...'
+    :
+    <div>
+      <button stype="submit" >Add Post</button>
+    </div>
   )
 
   showError = () => (
@@ -112,6 +117,19 @@ class Dashboard extends Component {
     :
     ''
   )
+
+  onEditorStateChange = (editorState) => {
+
+    let contentState = editorState.getCurrentContent();
+    let rawState = convertToRaw(contentState);
+
+    let html = stateToHTML(contentState)
+    console.log(html)
+
+    this.setState({
+      editorState
+    })
+  }
 
   render() {
     return(
@@ -122,15 +140,22 @@ class Dashboard extends Component {
             id={'author'}
             formData={this.state.formData.author}
             change={(element)=>this.updateForm(element)}
-         />
+          />
           <FormField
             id={'title'}
             formData={this.state.formData.title}
             change={(element)=>this.updateForm(element)}
-         />
+          />
 
-         {this.submitButton()}
-         {this.showError()}
+          <Editor
+            editorState={this.state.editorState}
+            wrapperClassName="myEditor-wrapper"
+            editorClassName="myEditor-editor"
+            onEditorStateChange={this.onEditorStateChange}
+          />
+
+          {this.submitButton()}
+          {this.showError()}
         </form>
       </div>
     )

@@ -17,3 +17,8 @@
     color:#878787;
     font-size: 12px;
 }
+@media screen and (max-width: 445px) {
+  .footer{
+    display: none;
+  }
+}
