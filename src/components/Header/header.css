@@ -1,17 +1,18 @@
 .header {
     background: #242424;
     border-bottom: 1px solid #000000;
+    height: 60px;
 }
 
 .headerOpt {
     display: flex;
+    align-items: center;
+    height: 100%;
+    margin-left: 20px;
 }
 
 .logo {
-    flex-grow: 1;
-    padding-top: 8px;
-}
-
-.logo img {
-    width:35px;
+  margin-left: 15px;
+  display: flex;
+  align-items: center;
 }

@@ -13,8 +13,8 @@ const Header = (props) => {
                 onClick={props.onOpenNav}
                 style={{
                     color:'#dfdfdf',
-                    padding:'10px',
-                    cursor:'pointer'
+                    cursor:'pointer',
+                    fontSize: '35px'
                 }}
             />
         </div>
