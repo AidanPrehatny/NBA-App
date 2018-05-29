@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import axios from 'axios';
-import { URL } from  '../../../../config';
+import { firebaseDB, firebaseLooper, firebaseTeams, firebaseVideos } from '../../../../firebase';
+
 
 import styles from '../../articles.css';
 import Header from './header';
@@ -16,38 +16,44 @@ class VideoArticle extends Component {
     }
 
     componentWillMount(){
-        axios.get(`${URL}/videos?id=${this.props.match.params.id}`)
-        .then( response => {
-            let article = response.data[0];
+      firebaseDB.ref(`videos/${this.props.match.params.id}`).once('value')
+      .then((snap)=>{
+        let article = snap.val();
 
-            axios.get(`${URL}/teams?id=${article.team}`)
-            .then( response => {
-                this.setState({
-                    article,
-                    team:response.data
-                });
-                this.getRelated();
-            })
+        firebaseTeams.orderByChild("id").equalTo(article.team).once('value')
+        .then((snap)=>{
+          const team = firebaseLooper(snap)
+          this.setState({
+            article,
+            team
+          })
+          this.getRelated();
         })
+      })
     }
+
 
     getRelated = () => {
-       
-        axios.get(`${URL}/teams`)
-        .then( response =>{
-            let teams = response.data
+      firebaseTeams.once('value')
+      .then((snap)=>{
+        const teams = firebaseLooper(snap);
 
-            axios.get(`${URL}/videos?q=${this.state.team[0].city}&_limit=3`)
-            .then( response =>{
-                this.setState({
-                    teams,
-                    related:response.data
-                })
-            })
+        firebaseVideos
+        .orderByChild("team")
+        .equalTo(this.state.article.team)
+        .limitToFirst(3).once('value')
+        .then((snap)=>{
+          const related = firebaseLooper(snap);
+          this.setState({
+            teams,
+            related
+          })
         })
+
+      })
     }
 
-  
+
     render(){
         const article = this.state.article;
         const team = this.state.team;
