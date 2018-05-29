@@ -7,6 +7,10 @@
 .logContainer div:nth-child(1) {
   margin: 10px;
 }
+.logContainer div:nth-child(4)  {
+  display: flex;
+  justify-content: center;
+}
 .logContainer h2 {
   font-weight: 300;
   text-align: center;
@@ -19,4 +23,17 @@
   padding: 12px 10px;
   box-sizing: border-box;
   font-weight: 300;
+}
+.logContainer button {
+  background: #03a9f4;
+  font-size: 13px;
+  padding: 10px;
+  color: #ffffff;
+  margin-top: 10px;
+  border: none;
+  cursor: pointer;
+  margin: 10px 10px 0 10px;
+}
+.logContainer button:hover {
+  opacity: .7;
 }
