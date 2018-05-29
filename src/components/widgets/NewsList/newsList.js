@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { CSSTransition , TransitionGroup } from 'react-transition-group';
 import { Link } from  'react-router-dom';
-import axios from 'axios';
+import {firebaseTeams, firebaseArticles, firebaseLooper } from '../../../firebase';
 
-import { URL } from '../../../config';
 import styles from './newsList.css';
 
 import Button from  '../Buttons/buttons';
@@ -25,28 +24,32 @@ class NewsList extends Component {
 
     request = (start,end) => {
         if(this.state.teams.length < 1){
-            axios.get(`${URL}/teams`)
-            .then( response => {
-                this.setState({
-                    teams:response.data
-                })
-            })
-        }
-
-
-        axios.get(`${URL}/articles?_start=${start}&_end=${end}`)
-        .then( response => {
+          firebaseTeams.once('value')
+          .then((snap)=>{
+            const teams = firebaseLooper(snap);
             this.setState({
-                items:[...this.state.items,...response.data],
-                start,
-                end
+              teams
             })
+          })
+        }
+        firebaseArticles.orderByChild("id").startAt(start).endAt(end).once('value')
+        .then((snap)=>{
+          const articles = firebaseLooper(snap);
+          this.setState({
+            items:[...this.state.items,...articles],
+            start,
+            end
+          })
+        })
+        .catch(e=>{
+          console.log(e)
         })
     }
 
+
     loadMore = () => {
         let end = this.state.end + this.state.amount;
-        this.request(this.state.end,end)
+        this.request(this.state.end + 1,end)
     }
 
 
@@ -73,7 +76,7 @@ class NewsList extends Component {
                             </div>
                         </div>
                     </CSSTransition>
-                    
+
                 ))
                 break;
             case('cardMain'):
