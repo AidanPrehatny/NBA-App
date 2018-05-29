@@ -7,7 +7,7 @@ import Footer from '../../components/Footer/footer';
 class Layout extends Component {
 
     state = {
-      showNav:false  
+      showNav:false
     }
 
     toggleSidenav = (action) =>{
@@ -15,11 +15,12 @@ class Layout extends Component {
             showNav:action
         })
     }
- 
+
     render(){
         return(
             <div>
                 <Header
+                  user={this.props.user}
                     showNav={this.state.showNav}
                     onHideNav={() => this.toggleSidenav(false)}
                     onOpenNav={() => this.toggleSidenav(true)}

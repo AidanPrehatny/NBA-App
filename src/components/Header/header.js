@@ -7,7 +7,6 @@ import SideNav from './SideNav/sideNav';
 
 const Header = (props) => {
 
-
     const navBars = () => (
         <div className={style.bars}>
             <FontAwesome name="bars"
@@ -26,7 +25,7 @@ const Header = (props) => {
             <img alt="nba logo" src="/images/nba_logo.png"/>
         </Link>
     )
-    
+
 
     return (
         <header className={style.header}>
