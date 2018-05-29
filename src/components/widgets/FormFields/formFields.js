@@ -3,6 +3,21 @@ import styles from './formFields.css';
 
 const FormFields = ({formData,change,id}) => {
 
+  const showError = () => {
+    let errorMessage = null;
+
+    if(formData.validation && !formData.valid){
+      errorMessage = (
+        <div style={{color:'red', fontWeight: '500', marginTop: '5px', padding: '5px'}}>
+          {formData.validationMessage}
+        </div>
+      )
+    }
+
+    return errorMessage;
+
+  }
+
   const renderTemplate = () => {
     let formTemplate = null;
 
@@ -16,6 +31,7 @@ const FormFields = ({formData,change,id}) => {
               onBlur={(event)=>change({event,id,blur:true})}
               onChange={(event)=>change({event,id,blur:false})}
             />
+            {showError()}
           </div>
         )
           break;
